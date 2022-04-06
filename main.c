@@ -14,6 +14,20 @@ const t_jump_function	*get_jump_table(void)
 	return (dir_table);
 }
 
+typedef struct s_body
+{
+	int	x;
+	int	y;
+}	t_body;
+
+t_list	*new_body(int x, int y)
+{
+	t_body	*body = malloc(sizeof(t_body));
+	body->x = x;
+	body->y = y;
+	return (ft_lstnew(body));
+}
+
 int	main(void)
 {
 	setlocale(LC_ALL, "");
@@ -24,12 +38,16 @@ int	main(void)
 
 	printf("\x1b[?25l");
 
-	int	y = 1;
-	int	x = 1;
+	int x = 1;
+	int y = 1;
+
 	const	t_jump_function *dir_table = get_jump_table();
 
 	int	c;
 	int	dir = 'd';
+
+	t_list	*snake = new_body(1, 1);
+	ft_lstadd_back(&snake, new_body(2, 1));
 
 	while (1)
 	{
