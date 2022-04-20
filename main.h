@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <curses.h>
 #include <locale.h>
+#include <time.h>
 
 #include "libft.h"
 
