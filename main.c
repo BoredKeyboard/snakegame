@@ -6,17 +6,41 @@
 #define WIN_Y_POS 5
 
 typedef void	(*t_jump_function)(int *y, int *x);
+typedef enum e_dir
+{
+	NONE = 0,
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT
+}				t_dir;
 
-const t_jump_function	*get_jump_table(void)
+void	do_dir(t_dir dir, int *y, int *x)
 {
 	const static t_jump_function	dir_table[] = {
-	['w'] = up_dir,
-	['s'] = down_dir,
-	['a'] = left_dir,
-	['d'] = right_dir
+	[UP] = up_dir,
+	[DOWN] = down_dir,
+	[LEFT] = left_dir,
+	[RIGHT] = right_dir
 	};
 
-	return (dir_table);
+	dir_table[dir](y, x);
+}
+
+const t_dir	get_dir(int c)
+{
+	const static t_dir dir_table[] = {
+	['w'] = UP,
+	['s'] = DOWN,
+	['a'] = LEFT,
+	['d'] = RIGHT,
+	[KEY_UP] = UP,
+	[KEY_DOWN] = DOWN,
+	[KEY_LEFT] = LEFT,
+	[KEY_RIGHT] = RIGHT
+	};
+
+	return (dir_table[c]);
 }
 
 typedef struct s_body
@@ -129,11 +153,9 @@ int	main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "");
 	initscr(); cbreak(); noecho(); timeout(75);
-	nonl();
+	nonl(); intrflush(stdscr, FALSE); keypad(stdscr, TRUE);
 	WINDOW * win = newwin(HEIGHT, WIDTH, WIN_Y_POS, WIN_X_POS);
 	refresh();
-	intrflush(stdscr, FALSE);
-	keypad(stdscr, TRUE);
 	srand(time(NULL));
 
 	// wborder(win, "█", '┃', '-', '-', '+', '+', '+', '+');
@@ -170,13 +192,11 @@ int	main(int argc, char *argv[])
 
 	int	score = 0;
 
-	const	t_jump_function *dir_table = get_jump_table();
-
 	int	fruit_x = 10;
 	int	fruit_y = 10;
 
 	int	c;
-	int	dir = 'd';
+	t_dir	dir = RIGHT;
 
 	t_list	*snake = NULL;
 
@@ -202,11 +222,12 @@ int	main(int argc, char *argv[])
 			break ;
 		if (argc == 1 && border_collision(head))
 			break ;
-		if ((c == 's' && dir != 'w') ||
-			(c == 'w' && dir != 's') ||
-			(c == 'a' && dir != 'd') ||
-			(c == 'd' && dir != 'a'))
-			dir = c;
+		t_dir cdir = get_dir(c);
+		if ((cdir == DOWN && dir != UP) ||
+			(cdir == UP && dir != DOWN) ||
+			(cdir == LEFT && dir != RIGHT) ||
+			(cdir == RIGHT && dir != LEFT))
+			dir = cdir;
 		if (fruit_collision(head, fruit_x, fruit_y))
 		{
 			newfruit(&fruit_x, &fruit_y, snake);
@@ -215,8 +236,8 @@ int	main(int argc, char *argv[])
 		}
 		else
 			del_tail(&snake);
-		dir_table[dir](&y, &x);
-		if (argc == 2)
+		do_dir(dir, &y, &x);
+		if (argc != 1)
 			wrap_around(&x, &y);
 		new_head(&head, x, y);
 
