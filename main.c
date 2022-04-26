@@ -144,6 +144,14 @@ int	main(int argc, char *argv[])
 		exit(EXIT_SUCCESS);
 	}
 
+	int	f = open("HS.txt", O_WRONLY);
+	if (f < 0)
+	{
+		exit(5);
+	}
+	dprintf(f, "bleh\n");
+	close(f);
+
 
 	start_color();
 	init_pair(1, COLOR_RED, COLOR_BLACK);
@@ -221,6 +229,8 @@ int	main(int argc, char *argv[])
 
 
 /*
-argc als er een argument wordt doorgegeven aan de uitvoering dan gaat wall collision uit
-anders staat standaard de wall collision aan
+Blijf in directie bewegen totdat er een muur is of nieuwe movement input
+Kan elke 4 directies in draaien tenzij er een muur in die directie is
+Als een input in de richting van een muur is beweegt pacman pas in die richting als er geen muur meer is (een opening)
+
 */

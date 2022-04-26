@@ -1,0 +1,1 @@
+gcc main.c dir.c -Ilibft -Llibft -lft -lncurses -fsanitize=address && ./a.out 1
