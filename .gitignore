@@ -1,2 +1,14 @@
-a.out
-.DS_Store
+*
+!*/
+!*.[ch]
+!Makefile
+!*.mk
+!notes.txt
+!HS.txt
+!.normignore
+!.gitignore
+
+libft/*
+!libft/Makefile
+!libft/*.mk
+!libft/*.[ch]
