@@ -178,7 +178,7 @@ int	main(int argc, char *argv[])
 	start_color();
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(3, COLOR_WHITE, COLOR_BLACK);
+	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(2));
 	wbkgd(win, COLOR_PAIR(2));
 
@@ -239,7 +239,9 @@ int	main(int argc, char *argv[])
 		do_dir(dir, &y, &x);
 		if (argc != 1)
 			wrap_around(&x, &y);
+		attron(COLOR_PAIR(3));
 		new_head(&head, x, y);
+		attroff(COLOR_PAIR(3));
 
 	}
 
