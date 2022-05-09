@@ -128,7 +128,7 @@ int	wrap_around(int *x, int *y)
 int	main(int argc, char *argv[])
 {
 	setlocale(LC_ALL, "");
-	initscr(); cbreak(); noecho(); timeout(75);
+	initscr(); cbreak(); noecho(); timeout(60);
 	nonl();
 	WINDOW * win = newwin(HEIGHT, WIDTH, WIN_Y_POS, WIN_X_POS);
 	refresh();
@@ -156,7 +156,7 @@ int	main(int argc, char *argv[])
 	start_color();
 	init_pair(1, COLOR_RED, COLOR_BLACK);
 	init_pair(2, COLOR_YELLOW, COLOR_BLACK);
-	init_pair(3, COLOR_WHITE, COLOR_BLACK);
+	init_pair(3, COLOR_GREEN, COLOR_BLACK);
 	attron(COLOR_PAIR(2));
 	wbkgd(win, COLOR_PAIR(2));
 
@@ -218,7 +218,9 @@ int	main(int argc, char *argv[])
 		dir_table[dir](&y, &x);
 		if (argc == 2)
 			wrap_around(&x, &y);
+		attron(COLOR_PAIR(3));
 		new_head(&head, x, y);
+		attroff(COLOR_PAIR(3));
 
 	}
 
